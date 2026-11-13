@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Bebas_Neue, DM_Sans } from "next/font/google";
 import "./globals.css";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps) {
         <ClerkProvider>
           {children}
         </ClerkProvider>
+        <SpeedInsights />
       
       </body>
     </html>
