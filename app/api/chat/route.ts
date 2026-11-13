@@ -2,6 +2,7 @@ import { streamText, convertToModelMessages, stepCountIs } from "ai";
 import { getModel } from "@/lib/ai/provider";
 import { chatTools } from "@/lib/ai/tools";
 import { SYSTEM_PROMPT } from "@/lib/ai/prompt";
+import { auth } from "@clerk/nextjs/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,6 +10,9 @@ export const maxDuration = 30;
 
 // GET = health/tools list (ponytail: one route, two verbs)
 export async function GET() {
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "UNAUTHENTICATED" }, { status: 401 });
+
   return Response.json({
     status: "ok",
     model: process.env.AI_MODEL || "openai/gpt-oss-20b",
@@ -19,6 +23,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "UNAUTHENTICATED" }, { status: 401 });
+
   let body: any;
   try { body = await req.json(); } catch { return Response.json({ error: "Invalid JSON" }, { status: 400 }); }
 
